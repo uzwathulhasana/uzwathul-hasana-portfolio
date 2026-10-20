@@ -1,107 +1,165 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { GraduationCap, MapPin, CheckCircle2, Award } from 'lucide-react';
-import { educationData } from '../data/portfolioData';
+import { motion, useReducedMotion } from 'framer-motion';
+import { GraduationCap, Award, Sparkles } from 'lucide-react';
+import { educationData, certificationsData, quoteCard } from '../data/portfolioData';
 
 export default function Education() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: 'easeOut' }
-    }
-  };
+  const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section id="education" className="py-14 sm:py-24 px-4 sm:px-6 lg:px-8 relative bg-[#050505] text-white overflow-hidden border-t-4 border-[#FFF04A]">
-      {/* Decorative Background Text */}
-      <div className="absolute top-6 left-6 text-[14vw] font-black text-[#FFF04A]/5 leading-none select-none pointer-events-none font-heading uppercase">
-        EDU
-      </div>
-
-      <div className="max-w-5xl mx-auto relative z-10">
+    <section id="education" className="py-14 sm:py-28 px-3.5 sm:px-6 lg:px-8 relative z-10 bg-[#FFF5D6] border-b border-[#111111]/6">
+      <div className="max-w-7xl mx-auto">
         
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center md:text-left max-w-3xl mb-16"
-        >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-[#FFF04A] text-[#050505] text-xs font-black uppercase tracking-widest mb-3">
-            <GraduationCap className="w-3.5 h-3.5" />
-            <span>05 / ACADEMIC QUALIFICATIONS</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#FFF04A] tracking-tight mb-3 sm:mb-4 uppercase font-heading">
-            EDUCATION
-          </h2>
-          <p className="text-gray-300 text-sm sm:text-lg font-medium">
-            Foundational computer applications coursework and advanced software engineering master's program.
-          </p>
-        </motion.div>
-
-        {/* Education Cards Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-40px' }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-        >
-          {educationData.map((edu, idx) => (
+        {/* 3-Column Layout: 05 Education | 06 Certifications | Dark Quote Card */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
+          
+          {/* Column 1: 05 Education — Float-Up Reveal */}
+          <div className="lg:col-span-4 space-y-4 sm:space-y-6 text-left">
             <motion.div
-              key={idx}
-              variants={itemVariants}
-              className="p-6 sm:p-8 rounded-md bg-[#151515] border-2 border-[#2A2A2A] hover:border-[#FFF04A] relative overflow-hidden flex flex-col justify-between transition-all duration-300 shadow-2xl"
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.55 }}
+              className="flex items-center gap-2.5 sm:gap-3"
             >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="px-3 py-1 rounded-md bg-[#FFF04A] text-[#050505] text-xs font-black font-mono uppercase">
-                    {edu.period}
-                  </span>
-                  <span className="text-xs font-black text-[#FFF04A] flex items-center gap-1 uppercase tracking-wider font-heading">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    {edu.status}
-                  </span>
-                </div>
+              <span className="section-badge">05</span>
+              <h2 className="text-xl sm:text-3xl font-extrabold text-[#111111] tracking-tight">
+                Education
+              </h2>
+            </motion.div>
 
-                <div>
-                  <h3 className="text-lg sm:text-2xl font-black text-white leading-snug uppercase font-heading">
-                    {edu.degree}
-                  </h3>
-                  <p className="text-xs font-black text-[#FFF04A] mt-1 uppercase font-heading">
+            <div className="space-y-3 sm:space-y-4">
+              {educationData.map((edu, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 32, scale: 0.94 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{
+                    duration: 0.55,
+                    delay: idx * 0.12,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  whileHover={shouldReduceMotion ? {} : {
+                    y: -3,
+                    scale: 1.015,
+                    boxShadow: '0 12px 28px -4px rgba(224,160,21,0.14)',
+                  }}
+                  className="glass-card p-3.5 sm:p-5 rounded-xl sm:rounded-[22px] space-y-1 sm:space-y-1.5 transition-shadow duration-200"
+                >
+                  <div className="flex items-center gap-2.5 sm:gap-3 mb-1.5 sm:mb-2">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF1A8] text-[#F4BD32] flex items-center justify-center shrink-0">
+                      <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </div>
+                    <h3 className="text-sm sm:text-lg font-extrabold text-[#111111]">
+                      {edu.degree}
+                    </h3>
+                  </div>
+                  <p className="text-xs sm:text-sm font-semibold text-[#111111]">
                     {edu.institution}
                   </p>
-                  <p className="text-xs text-gray-400 flex items-center gap-1 mt-1 font-medium">
-                    <MapPin className="w-3 h-3 text-[#FFF04A]" />
-                    <span>{edu.location}</span>
-                  </p>
-                </div>
+                  {edu.affiliation && (
+                    <p className="text-[10px] sm:text-[11px] text-[#6B6451] italic">
+                      {edu.affiliation}
+                    </p>
+                  )}
+                  <span className="inline-block text-[10px] sm:text-[11px] font-bold text-[#F4BD32] bg-[#FFF1A8] px-2.5 py-0.5 rounded-full mt-0.5 sm:mt-1">
+                    {edu.period}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
 
-                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed pt-2 border-t border-[#2A2A2A] font-medium">
-                  {edu.description}
-                </p>
+          {/* Column 2: 06 Certifications — 3D Flip-In Effect */}
+          <div id="certifications" className="lg:col-span-4 space-y-4 sm:space-y-6 text-left" style={{ perspective: 1000 }}>
+            <motion.div
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.55 }}
+              className="flex items-center gap-2.5 sm:gap-3"
+            >
+              <span className="section-badge">06</span>
+              <h2 className="text-xl sm:text-3xl font-extrabold text-[#111111] tracking-tight">
+                Certifications
+              </h2>
+            </motion.div>
+
+            <div className="space-y-3 sm:space-y-4">
+              {certificationsData.map((cert, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={shouldReduceMotion ? false : { opacity: 0, rotateX: 18, y: 24, transformPerspective: 1000 }}
+                  whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: idx * 0.12,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  whileHover={shouldReduceMotion ? {} : {
+                    y: -4,
+                    scale: 1.015,
+                    boxShadow: '0 14px 30px -4px rgba(255, 216, 77, 0.35), 0 0 0 1.5px #FFD84D',
+                    borderColor: '#FFD84D',
+                  }}
+                  className="glass-card p-3.5 sm:p-5 rounded-xl sm:rounded-[22px] space-y-1 sm:space-y-1.5 transition-all duration-200"
+                >
+                  <div className="flex items-center gap-2.5 sm:gap-3 mb-1.5 sm:mb-2">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF1A8] text-[#F4BD32] flex items-center justify-center shrink-0">
+                      <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </div>
+                    <h3 className="text-sm sm:text-lg font-extrabold text-[#111111]">
+                      {cert.title}
+                    </h3>
+                  </div>
+                  <p className="text-xs sm:text-sm font-semibold text-[#6B6451]">
+                    {cert.issuer}
+                  </p>
+                  <span className="inline-block text-[10px] sm:text-[11px] font-bold text-[#F4BD32] bg-[#FFF1A8] px-2.5 py-0.5 rounded-full mt-0.5 sm:mt-1">
+                    {cert.year}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 3: Dark Quote Card — Smooth Glow Reveal */}
+          <div className="lg:col-span-4 flex items-center mt-2 sm:mt-0">
+            <motion.div
+              initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.94, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full min-h-[190px] sm:min-h-[260px] rounded-xl sm:rounded-[22px] bg-[#12121A]/90 backdrop-blur-xl text-white p-5 sm:p-8 flex flex-col justify-between relative overflow-hidden border border-[#FFD84D]/35 shadow-[0_20px_50px_rgba(0,0,0,0.35),0_0_30px_rgba(255,216,77,0.1),inset_0_1px_1px_rgba(255,255,255,0.12)] hover:border-[#FFD84D]/60 hover:shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_40px_rgba(255,216,77,0.2)] transition-all duration-300"
+            >
+              {/* Subtle gold doodle leaves/sparks on top */}
+              <div className="flex justify-between items-start">
+                <div className="text-xl sm:text-2xl text-[#FFD84D] opacity-80 select-none">
+                  🌿
+                </div>
+                <div className="text-xs sm:text-sm text-[#FFD84D] opacity-70">
+                  ✦
+                </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[#2A2A2A] flex items-center justify-between text-xs text-gray-400 font-mono font-bold">
-                <span className="flex items-center gap-1.5 text-[#FFF04A]">
-                  <Award className="w-3.5 h-3.5" />
-                  Computer Applications Focus
-                </span>
+              {/* Main Golden Quote in Caveat handwriting */}
+              <div className="my-auto text-left py-2.5 sm:py-4">
+                <blockquote className="font-handwriting text-2xl sm:text-4xl text-[#FFD84D] font-bold leading-tight tracking-wide drop-shadow-sm">
+                  {quoteCard.quote}
+                </blockquote>
+              </div>
+
+              {/* Bottom heart and sparks doodle */}
+              <div className="flex justify-end items-center gap-1.5 text-xs text-[#FFD84D]/70 font-mono">
+                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FFD84D]" />
+                <span className="text-[10px] sm:text-[11px] text-white/50 tracking-wider">ALWAYS LEARNING</span>
               </div>
             </motion.div>
-          ))}
-        </motion.div>
+          </div>
+
+        </div>
 
       </div>
     </section>

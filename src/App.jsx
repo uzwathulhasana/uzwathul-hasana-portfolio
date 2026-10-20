@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import Lenis from 'lenis';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -6,49 +7,63 @@ import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Experience from './components/Experience';
 import Education from './components/Education';
-import Certifications from './components/Certifications';
-import ResumeCTA from './components/ResumeCTA';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
+import BackgroundBlobs from './components/BackgroundBlobs';
 
 export default function App() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.classList.add('light');
+    // Enable smooth momentum scrolling throughout the portfolio
+    if (typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
     }
-  }, [isDarkMode]);
 
-  const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
-  };
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 1.5,
+    });
+    window.__lenis = lenis;
 
+    let rafId;
+    function raf(time) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      window.__lenis = null;
+    };
+  }, []);
   return (
-    <div className="min-h-screen bg-theme-bg text-theme-primary flex flex-col font-sans selection:bg-brand-gold selection:text-darkBg relative transition-colors duration-300">
+    <div className="min-h-screen bg-[#FFFBEA] text-[#111111] flex flex-col font-sans selection:bg-[#FFD84D] selection:text-[#111111] relative overflow-x-hidden">
+      {/* Background Drifting Ambient Blobs */}
+      <BackgroundBlobs />
+
+      {/* Desktop Cursor Glow */}
       <CustomCursor />
-      <Navbar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
-      
-      <main className="flex-1">
+
+      {/* Sticky Glass Navbar */}
+      <Navbar />
+
+      {/* Main Sections matching Mockup hierarchy */}
+      <main className="flex-1 relative z-10">
         <Hero />
         <About />
         <Skills />
         <Projects />
         <Experience />
         <Education />
-        <Certifications />
-        <ResumeCTA />
         <Contact />
       </main>
 
+      {/* Dark Footer */}
       <Footer />
     </div>
   );
 }
-
-

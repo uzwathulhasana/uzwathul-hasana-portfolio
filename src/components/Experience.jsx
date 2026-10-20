@@ -1,154 +1,162 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Briefcase, Calendar, MapPin, ExternalLink, CheckCircle2, Building2, Code } from 'lucide-react';
-import { experienceData } from '../data/portfolioData';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Briefcase, Laptop, Code2 } from 'lucide-react';
+import { experienceData, myGoal } from '../data/portfolioData';
+
+const experienceIcons = [Briefcase, Laptop, Code2];
 
 export default function Experience() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 35 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' }
-    }
-  };
+  const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section id="experience" className="py-14 sm:py-24 px-4 sm:px-6 lg:px-8 relative bg-[#FFF04A] text-[#050505] overflow-hidden border-y-4 border-[#050505]">
-      {/* Decorative Large Section Identifier */}
-      <div className="absolute top-6 right-6 text-[15vw] font-black text-[#050505]/10 leading-none select-none pointer-events-none font-heading uppercase">
-        04
-      </div>
-
-      <div className="max-w-5xl mx-auto relative z-10">
+    <section id="experience" className="py-14 sm:py-28 px-3.5 sm:px-6 lg:px-8 relative z-10 bg-[#FFFAF0] border-b border-[#111111]/6">
+      <div className="max-w-7xl mx-auto">
         
-        {/* Section Header */}
+        {/* Section Header - Scroll Animated */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center md:text-left max-w-3xl mb-16"
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-2 sm:space-y-3 mb-8 sm:mb-16 text-left"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-[#050505] text-[#FFF04A] text-xs font-black uppercase tracking-widest mb-3">
-            <Briefcase className="w-3.5 h-3.5" />
-            <span>04 / PRACTICAL EXPERIENCE</span>
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <span className="section-badge">04</span>
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#111111] tracking-tight">
+              Experience
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#050505] tracking-tight mb-3 sm:mb-4 uppercase font-heading">
-            EXPERIENCE
-          </h2>
-          <p className="text-[#050505]/80 text-sm sm:text-lg font-bold">
-            Client-facing software development, application maintenance, and web development internships.
+          <p className="text-[#6B6451] text-xs sm:text-base font-medium max-w-xl">
+            Hands-on experience in design, learning and collaboration.
           </p>
         </motion.div>
 
-        {/* Experience Timeline */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-50px' }}
-          className="space-y-8"
-        >
-          {experienceData.map((exp, idx) => {
-            const expNum = (idx + 1).toString().padStart(2, '0');
-            return (
-              <motion.div
-                key={idx}
-                variants={itemVariants}
-                className="p-6 sm:p-8 rounded-md bg-[#050505] text-white border-2 border-[#050505] relative overflow-hidden shadow-2xl"
-              >
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 mb-6 border-b border-[#2A2A2A]">
-                  <div>
-                    <div className="flex items-center gap-2.5 mb-2 flex-wrap">
-                      <span className="bg-[#FFF04A] text-[#050505] font-black px-2.5 py-0.5 rounded text-xs font-mono">
-                        {expNum}
-                      </span>
-                      <h3 className="text-xl sm:text-3xl font-black text-[#FFF04A] uppercase font-heading">{exp.role}</h3>
-                      <span className="px-3 py-1 rounded-md bg-[#151515] border border-[#FFF04A]/40 text-[#FFF04A] text-xs font-bold uppercase">
-                        {exp.type}
-                      </span>
-                    </div>
+        {/* 2-Column Layout: Progressive Timeline on Left, Floating Note on Right */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
+          
+          {/* Left Column: Progressive Timeline with Vertical Stem */}
+          <div className="lg:col-span-8 relative text-left">
+            
+            {/* Animated Vertical Timeline Line */}
+            <motion.div
+              initial={shouldReduceMotion ? false : { scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              style={{ originY: 0 }}
+              className="absolute left-[16px] sm:left-[23px] top-4 bottom-4 sm:top-6 sm:bottom-6 w-0.5 bg-gradient-to-b from-[#FFD84D] via-[#F4BD32] to-[#FFD84D]/25 -z-0"
+              aria-hidden="true"
+            />
 
-                    <div className="flex items-center gap-3 text-gray-300 text-sm font-bold flex-wrap">
-                      <span className="text-white font-extrabold flex items-center gap-1.5">
-                        <Building2 className="w-4 h-4 text-[#FFF04A]" />
-                        {exp.company}
-                      </span>
-                      <span className="text-gray-500">•</span>
-                      <span className="text-gray-400 text-xs font-medium">{exp.companyCategory}</span>
-                    </div>
-                  </div>
+            <div className="space-y-4 sm:space-y-8 relative z-10">
+              {experienceData.map((exp, index) => {
+                const Icon = experienceIcons[index % experienceIcons.length];
+                const isEven = index % 2 === 0;
+                // Alternating entry direction where appropriate (left vs right)
+                const initialX = shouldReduceMotion ? 0 : (isEven ? -26 : 26);
 
-                  <div className="flex flex-col md:items-end gap-1 text-xs text-gray-400 font-mono font-bold">
-                    <div className="flex items-center gap-1.5 text-[#FFF04A]">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>{exp.period}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-gray-300">
-                      <MapPin className="w-3.5 h-3.5" />
-                      <span>{exp.location}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Summary */}
-                <p className="text-gray-200 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 font-medium">
-                  {exp.summary}
-                </p>
-
-                {/* Concrete Bullet Highlights */}
-                <div className="space-y-3 mb-6">
-                  <h4 className="text-xs uppercase font-black tracking-widest text-[#FFF04A] mb-2 font-heading">Key Responsibilities & Deliverables:</h4>
-                  {exp.highlights.map((highlight, hIdx) => (
-                    <div key={hIdx} className="flex items-start gap-3 text-sm text-gray-300 leading-relaxed font-medium">
-                      <CheckCircle2 className="w-4 h-4 text-[#FFF04A] shrink-0 mt-0.5" />
-                      <span>{highlight}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Tech Stack Pills */}
-                <div className="pt-4 border-t border-[#292929] flex items-center justify-between flex-wrap gap-3">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-mono text-[#FFF04A] flex items-center gap-1 font-bold">
-                      <Code className="w-3.5 h-3.5" /> Tech Stack:
-                    </span>
-                    {exp.techStack.map((tech, tIdx) => (
-                      <span key={tIdx} className="px-2.5 py-1 rounded-md bg-[#181818] border border-[#FFF04A]/40 text-[#FFF04A] text-xs font-mono font-bold uppercase">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  <a
-                    href="https://learninghub.qmex.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor-label="VISIT"
-                    className="inline-flex items-center gap-1.5 text-xs font-black text-[#FFF04A] hover:underline uppercase tracking-wider font-heading"
+                return (
+                  <motion.div
+                    key={exp.id}
+                    initial={shouldReduceMotion ? false : { opacity: 0, x: initialX }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.25 }}
+                    transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+                    className="glass-card p-3.5 sm:p-7 rounded-xl sm:rounded-2xl relative overflow-hidden"
                   >
-                    <span>Live Project Portal</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
+                    <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-5">
+                      {/* Timeline Node Badge with Smooth Scale Up */}
+                      <motion.div
+                        initial={shouldReduceMotion ? false : { scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.45, delay: index * 0.12 + 0.1, type: "spring", stiffness: 300, damping: 20 }}
+                        className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-[#FFD84D] text-[#111111] flex items-center justify-center shrink-0 shadow-sm mt-0.5 border sm:border-2 border-white ring-1 sm:ring-2 ring-[#FFD84D]/40"
+                      >
+                        <Icon className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+                      </motion.div>
 
-              </motion.div>
-            );
-          })}
-        </motion.div>
+                      {/* Content with Staggered Delays for Dates, Job Titles, and Descriptions */}
+                      <div className="space-y-2 sm:space-y-3 flex-1">
+                        <div>
+                          <motion.div
+                            initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.35, delay: index * 0.12 + 0.12 }}
+                            className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2"
+                          >
+                            <h3 className="text-base sm:text-xl font-extrabold text-[#111111]">
+                              {exp.company}
+                            </h3>
+                            {exp.period && (
+                              <span className="text-[10px] sm:text-xs font-bold text-[#F4BD32] bg-[#FFF1A8] px-2.5 py-0.5 sm:px-3 sm:py-0.5 rounded-full">
+                                {exp.period}
+                              </span>
+                            )}
+                          </motion.div>
+
+                          <motion.p
+                            initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.35, delay: index * 0.12 + 0.18 }}
+                            className="text-[11px] sm:text-sm font-semibold text-[#6B6451] mt-0.5"
+                          >
+                            {exp.role}
+                          </motion.p>
+                        </div>
+
+                        {/* Bullets with Micro-Stagger */}
+                        <ul className="space-y-1 sm:space-y-1.5 text-[11px] sm:text-sm text-[#111111]/85 font-medium leading-relaxed">
+                          {exp.bullets.map((bullet, bIdx) => (
+                            <motion.li
+                              key={bIdx}
+                              initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.35, delay: index * 0.12 + 0.22 + bIdx * 0.05 }}
+                              className="flex items-start gap-1.5 sm:gap-2"
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#FFD84D] mt-1.5 sm:mt-2 shrink-0" />
+                              <span>{bullet}</span>
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Column: Floating Editorial Note in Yellow Blob */}
+          <div className="lg:col-span-4 flex justify-center items-center mt-4 sm:mt-0">
+            <motion.div
+              animate={{
+                y: [0, -12, 0],
+                rotate: [2, -2, 2],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="relative w-52 h-52 sm:w-72 sm:h-72 rounded-full bg-gradient-to-tr from-[#FFF1A8] via-[#FFD84D]/40 to-[#FFFBEA] p-4 sm:p-6 flex flex-col items-center justify-center text-center shadow-lg border border-[#FFD84D]/50 select-none"
+            >
+              {/* Doodle accents */}
+              <div className="text-lg sm:text-2xl text-[#E0A015] mb-1.5 sm:mb-2">✦</div>
+              <div className="font-handwriting text-2xl sm:text-4xl text-[#111111] font-bold leading-snug max-w-[160px] sm:max-w-[190px]">
+                {myGoal.noteSubtitle}
+              </div>
+              <div className="text-lg sm:text-xl text-[#E0A015] mt-1.5 sm:mt-2">♡</div>
+            </motion.div>
+          </div>
+
+        </div>
 
       </div>
     </section>
   );
 }
-
-

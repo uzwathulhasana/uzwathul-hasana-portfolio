@@ -6,11 +6,32 @@ export default defineConfig({
   plugins: [
     react(),
     {
-      name: 'pdf-headers',
+      name: 'pdf-streamer',
       configureServer(server) {
-        server.middlewares.use((req, res, next) => {
-          if (req.url && req.url.toLowerCase().includes('.pdf')) {
-            res.setHeader('Content-Type', 'application/pdf');
+        server.middlewares.use(async (req, res, next) => {
+          // NEVER intercept Vite internal module requests
+          if (!req.url || req.url.startsWith('/@') || req.url.includes('?import')) {
+            return next();
+          }
+
+          const cleanUrl = req.url.split('?')[0];
+          if (cleanUrl.toLowerCase().endsWith('.pdf')) {
+            const fs = await import('fs');
+            const path = await import('path');
+            const filePath = path.join(process.cwd(), 'public', 'k.Uzwathul_Hasana_Resume.pdf');
+            if (fs.existsSync(filePath)) {
+              const buf = fs.readFileSync(filePath);
+              res.writeHead(200, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'attachment; filename="k.Uzwathul_Hasana_Resume.pdf"',
+                'Content-Length': buf.length,
+                'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+              });
+              res.end(buf);
+              return;
+            }
           }
           next();
         });

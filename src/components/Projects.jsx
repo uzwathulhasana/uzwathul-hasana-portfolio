@@ -1,291 +1,301 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FolderGit2, ExternalLink, Github, ArrowUpRight, Cpu, AlertCircle, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  AlertCircle,
+  Cpu,
+  Github,
+  Eye,
+} from 'lucide-react';
 import { projectsData } from '../data/portfolioData';
+import ParticleCanvas from './ParticleCanvas';
 import ProjectModal from './ProjectModal';
 
 export default function Projects() {
+  // Order projects exactly as seen in design:
+  // 01: Apparel Design, 02: Inventory Reorder Alert, 03: QMEX Learning Hub
+  const sortedProjects = [
+    projectsData.find((p) => p.id === 'apparel-design-system') || projectsData[1],
+    projectsData.find((p) => p.id === 'inventory-reorder-alert') || projectsData[2],
+    projectsData.find((p) => p.id === 'qmex-learning-hub') || projectsData[0],
+  ].filter(Boolean);
+
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
 
+  // Auto-advance card every 10 seconds
+  useEffect(() => {
+    if (isPaused || selectedProject) return;
+
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % sortedProjects.length);
+    }, 10000); // exactly 10 seconds
+
+    return () => clearInterval(timer);
+  }, [activeIndex, isPaused, selectedProject, sortedProjects.length]);
+
   const handlePrev = () => {
-    setActiveIndex(prev => (prev === 0 ? projectsData.length - 1 : prev - 1));
+    setActiveIndex((prev) => (prev === 0 ? sortedProjects.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setActiveIndex(prev => (prev === projectsData.length - 1 ? 0 : prev + 1));
+    setActiveIndex((prev) => (prev + 1) % sortedProjects.length);
   };
 
-  // Auto-rotate cards every 10 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      handleNext();
-    }, 10000);
-    return () => clearInterval(timer);
-  }, [activeIndex]);
-
   return (
-    <section id="projects" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 relative bg-[#FFF04A] text-[#050505] overflow-hidden border-y-4 border-[#050505]">
-      {/* Decorative Background Watermark Text */}
-      <div className="absolute top-6 right-6 text-[14vw] font-black text-[#050505]/10 leading-none select-none pointer-events-none font-heading uppercase">
-        03
+    <section
+      id="projects"
+      className="py-16 sm:py-32 px-3.5 sm:px-6 lg:px-8 bg-[#111111] text-white relative overflow-hidden z-10 border-b border-white/10"
+    >
+      {/* Particle Canvas Glow in Background */}
+      <ParticleCanvas />
+
+      {/* Dynamic Ambient Golden Glow in Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none" aria-hidden="true">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[360px] bg-gradient-to-r from-[#FFD84D]/15 via-[#FFF1A8]/8 to-transparent rounded-full blur-3xl opacity-60" />
+        <div className="absolute bottom-10 right-10 w-[360px] h-[360px] bg-[#E0A015]/10 rounded-full blur-3xl opacity-40" />
       </div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center md:text-left max-w-3xl mb-10"
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-[#050505] text-[#FFF04A] text-xs font-black uppercase tracking-widest mb-3">
-            <FolderGit2 className="w-3.5 h-3.5" />
-            <span>03 / PORTFOLIO SHOWCASE</span>
+          <div className="space-y-2 sm:space-y-3 text-left">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <span className="section-badge">03</span>
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+                Featured Projects
+              </h2>
+            </div>
+            <p className="text-white/65 text-xs sm:text-base max-w-2xl font-medium leading-relaxed">
+              A collection of my recent work. Each project reflects my focus on creating simple, useful, and beautiful full-stack solutions.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#050505] tracking-tight mb-2 sm:mb-3 uppercase font-heading">
-            SELECTED WORK
-          </h2>
-          <p className="text-[#050505]/80 text-sm sm:text-lg font-bold">
-            Real-world full-stack web applications, automation tools, and client platforms.
-          </p>
+
+          <a
+            href="https://github.com/uzwathulhasana"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#FFD84D] hover:text-[#FFF1A8] transition-colors self-start md:self-end"
+          >
+            <span>View All on GitHub</span>
+            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </a>
         </motion.div>
 
-        {/* 3D Coverflow Carousel Container */}
-        <div className="relative py-4 my-2" style={{ perspective: '1200px' }}>
-          
-          {/* Main 3D Card Stage */}
-          <div className="relative h-[310px] sm:h-[480px] w-full flex items-center justify-center">
-            {projectsData.map((project, idx) => {
-              const projectNumber = (idx + 1).toString().padStart(2, '0');
-              
-              // Calculate relative offset for 3D coverflow positioning
-              let offset = idx - activeIndex;
-              if (offset < -1 && projectsData.length > 2) offset += projectsData.length;
-              if (offset > 1 && projectsData.length > 2) offset -= projectsData.length;
+        {/* 3D Deck / Carousel Layout with Depth Reveal Scroll Animation */}
+        <motion.div
+          initial={{ opacity: 0, y: 36, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-full h-[510px] sm:h-[550px] md:h-[530px] flex items-center justify-center my-4 sm:my-6"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {sortedProjects.map((project, index) => {
+            const N = sortedProjects.length;
+            let offset = (index - activeIndex) % N;
+            if (offset < -1) offset += N;
+            if (offset > 1) offset -= N;
 
-              const isActive = offset === 0;
+            const isCenter = offset === 0;
+            const isLeft = offset === -1;
+            const isRight = offset === 1;
 
-              // Compute 3D Card Animation Attributes
-              let rotateY = 0;
-              let scale = 1;
-              let xTranslate = '0%';
-              let zIndex = 30;
-              let opacity = 1;
-              let filter = 'brightness(100%)';
+            return (
+              <motion.div
+                key={project.id}
+                initial={false}
+                animate={{
+                  x: isCenter ? '0%' : isLeft ? '-64%' : isRight ? '64%' : '0%',
+                  scale: isCenter ? 1 : 0.86,
+                  opacity: isCenter ? 1 : 0.32,
+                  zIndex: isCenter ? 30 : 10,
+                  filter: isCenter ? 'blur(0px) brightness(1)' : 'blur(1px) brightness(0.7)',
+                }}
+                transition={{
+                  duration: 0.65,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                onClick={() => {
+                  if (!isCenter) setActiveIndex(index);
+                }}
+                className={`absolute w-[92vw] max-w-[340px] sm:max-w-[480px] md:max-w-[530px] rounded-xl sm:rounded-3xl p-4 sm:p-6 text-left backdrop-blur-xl transition-all duration-300 select-none ${
+                  isCenter
+                    ? 'bg-[#12121A]/85 border-2 border-[#FFD84D]/50 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85),0_0_35px_rgba(255,216,77,0.18),inset_0_1px_1px_rgba(255,255,255,0.12)] cursor-default hover:border-[#FFD84D]/80 hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_42px_rgba(255,216,77,0.28),inset_0_1px_1px_rgba(255,255,255,0.16)]'
+                    : 'bg-[#14141E]/65 border border-white/12 shadow-[0_15px_35px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.06)] cursor-pointer hover:opacity-85 hover:border-[#FFD84D]/50 hover:shadow-[0_15px_35px_rgba(255,216,77,0.12)]'
+                }`}
+              >
+                {/* Header: Role Pill & Number Badge */}
+                <div className="flex items-center justify-between gap-2.5 sm:gap-3 pb-2.5 sm:pb-3.5 border-b border-white/10">
+                  <span className="px-2.5 py-0.5 sm:px-3.5 sm:py-1 rounded-full text-[9px] sm:text-[11px] font-mono font-bold tracking-wider uppercase border border-[#FFD84D]/50 bg-gradient-to-r from-[#FFD84D]/15 to-[#F59E0B]/10 text-transparent bg-clip-text bg-gradient-to-r from-[#FFF2A3] via-[#FFD84D] to-[#F59E0B] truncate max-w-[190px] sm:max-w-none">
+                    {project.role}
+                  </span>
+                  <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-md sm:rounded-lg bg-gradient-to-br from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] text-[#111111] font-mono font-black text-xs sm:text-sm flex items-center justify-center shrink-0 shadow-xs">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
 
-              if (offset === -1) {
-                rotateY = 22;
-                scale = 0.82;
-                xTranslate = '-58%';
-                zIndex = 20;
-                opacity = 0.65;
-                filter = 'brightness(70%)';
-              } else if (offset === 1) {
-                rotateY = -22;
-                scale = 0.82;
-                xTranslate = '58%';
-                zIndex = 20;
-                opacity = 0.65;
-                filter = 'brightness(70%)';
-              } else if (offset !== 0) {
-                rotateY = offset < 0 ? 32 : -32;
-                scale = 0.7;
-                xTranslate = offset < 0 ? '-100%' : '100%';
-                zIndex = 10;
-                opacity = 0;
-                filter = 'brightness(40%)';
-              }
+                {/* Title & Description with Yellow Gradient */}
+                <div className="mt-2.5 sm:mt-4">
+                  <h3 className="text-base sm:text-xl md:text-2xl font-black uppercase tracking-tight leading-snug line-clamp-2 bg-gradient-to-r from-[#FFF5C0] via-[#FFD84D] to-[#F5A623] bg-clip-text text-transparent">
+                    {project.title}
+                  </h3>
+                  <p className="text-[11px] sm:text-[13px] text-white/80 font-medium leading-relaxed mt-1.5 sm:mt-2 line-clamp-2">
+                    {project.shortDescription || project.description}
+                  </p>
+                </div>
 
-              return (
-                <motion.div
-                  key={project.id}
-                  onClick={() => !isActive && setActiveIndex(idx)}
-                  animate={{
-                    rotateY,
-                    scale,
-                    x: xTranslate,
-                    opacity,
-                    zIndex,
-                    filter,
-                  }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 26 }}
-                  style={{ transformStyle: 'preserve-3d' }}
-                  className={`absolute w-full max-w-[275px] sm:max-w-md sm:max-w-lg h-[290px] sm:h-[450px] rounded-xl border-3 border-[#050505] overflow-hidden flex flex-col justify-between shadow-2xl bg-[#050505] text-white transition-shadow duration-300 ${
-                    isActive ? 'cursor-default shadow-3xl border-4' : 'cursor-pointer hover:opacity-90'
-                  }`}
-                >
-                  {/* Card Top Header Bar */}
-                  <div className="px-3 py-1.5 sm:px-5 sm:py-3.5 bg-[#111111] border-b-2 border-[#292929] flex items-center justify-between shrink-0">
-                    <span className="px-2 py-0.5 rounded-md bg-[#050505] border border-[#FFF04A]/60 text-[#FFF04A] text-[9.5px] sm:text-xs font-black uppercase tracking-wider font-mono truncate max-w-[190px] sm:max-w-none">
-                      {project.role}
+                {/* Structured Callout 1: Problem Solved */}
+                <div className="mt-2.5 sm:mt-3.5 p-2.5 sm:p-3.5 rounded-lg sm:rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/10 text-left">
+                  <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] bg-clip-text text-transparent">
+                    <AlertCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFD84D] shrink-0" />
+                    <span>Problem Solved:</span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-white/75 font-normal leading-relaxed mt-1 line-clamp-2">
+                    {project.caseStudy?.problem || project.description}
+                  </p>
+                </div>
+
+                {/* Structured Callout 2: Technical Architecture */}
+                <div className="mt-2 sm:mt-2.5 p-2.5 sm:p-3.5 rounded-lg sm:rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/10 text-left">
+                  <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] bg-clip-text text-transparent">
+                    <Cpu className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFD84D] shrink-0" />
+                    <span>Technical Architecture:</span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-white/75 font-normal leading-relaxed mt-1 line-clamp-2">
+                    {project.caseStudy?.solution || project.description}
+                  </p>
+                </div>
+
+                {/* Technology Pills */}
+                <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-2.5 sm:mt-4">
+                  {project.tags.slice(0, 5).map((tag, tIdx) => (
+                    <span
+                      key={tIdx}
+                      className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg text-[9px] sm:text-xs font-mono font-bold tracking-wider uppercase border border-[#FFD84D]/40 text-[#FFD84D] bg-gradient-to-r from-[#FFD84D]/10 to-[#F59E0B]/5"
+                    >
+                      {tag}
                     </span>
-                    <div className="bg-[#FFF04A] text-[#050505] px-2.5 py-0.5 rounded-md font-black text-xs sm:text-sm tracking-tighter font-heading shadow-md shrink-0">
-                      {projectNumber}
-                    </div>
-                  </div>
+                  ))}
+                  {project.tags.length > 5 && (
+                    <span className="px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-[9px] sm:text-xs font-mono font-bold text-white/60 border border-white/10 bg-white/5">
+                      +{project.tags.length - 5}
+                    </span>
+                  )}
+                </div>
 
-                  {/* Card Main Body */}
-                  <div className="p-2.5 sm:p-5 flex-1 flex flex-col justify-between overflow-hidden">
-                    <div className="space-y-1 sm:space-y-2">
-                      <h3 className="text-sm sm:text-xl font-black uppercase tracking-tight text-[#FFF04A] font-heading leading-tight line-clamp-1">
-                        {project.title}
-                      </h3>
+                {/* Action Bar: Case Study & Code Buttons */}
+                <div className="flex items-center justify-between pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-white/10">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedProject(project);
+                    }}
+                    className="inline-flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-black uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] hover:opacity-80 transition-opacity group/btn cursor-pointer"
+                  >
+                    <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFD84D] group-hover/btn:scale-110 transition-transform" />
+                    <span>View Case Study</span>
+                    <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFD84D]" />
+                  </button>
 
-                      <p className="text-[10px] sm:text-sm text-gray-300 leading-snug font-medium line-clamp-1 sm:line-clamp-2">
-                        {project.shortDescription}
-                      </p>
+                  <a
+                    href={project.githubUrl || 'https://github.com/uzwathulhasana'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-md sm:rounded-lg bg-white/10 hover:bg-white/15 text-white text-[11px] sm:text-xs font-bold border border-white/15 hover:border-[#FFD84D]/50 transition-all shadow-2xs backdrop-blur-sm"
+                  >
+                    <Github className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" />
+                    <span>Code</span>
+                  </a>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
 
-                      {/* Problem Solved Container */}
-                      <div className="p-1.5 sm:p-2.5 rounded-md bg-[#181818] border border-[#292929] space-y-0.5">
-                        <div className="text-[9px] sm:text-[11px] font-black text-[#FFF04A] flex items-center gap-1 sm:gap-1.5 uppercase tracking-widest font-heading">
-                          <AlertCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFF04A] shrink-0" />
-                          <span>Problem Solved:</span>
-                        </div>
-                        <p className="text-[9.5px] sm:text-xs text-gray-300 leading-snug font-medium line-clamp-1 sm:line-clamp-2">
-                          {project.problem}
-                        </p>
-                      </div>
+        {/* Carousel Navigation Bar (Matching user screenshot) */}
+        <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 select-none">
+          {/* Left Arrow Button */}
+          <button
+            type="button"
+            onClick={handlePrev}
+            className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#12121A]/85 backdrop-blur-md border-2 border-white/15 hover:border-[#FFD84D] flex items-center justify-center text-[#FFD84D] hover:bg-[#1A1A22] transition-all hover:scale-105 active:scale-95 shadow-lg cursor-pointer"
+            aria-label="Previous project"
+          >
+            <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 text-[#FFD84D]" strokeWidth={2.5} />
+          </button>
 
-                      {/* Technical Architecture Container */}
-                      <div className="p-1.5 sm:p-2.5 rounded-md bg-[#FFF04A]/10 border border-[#FFF04A]/30 text-white space-y-0.5">
-                        <div className="text-[9px] sm:text-[11px] font-black text-[#FFF04A] flex items-center gap-1 sm:gap-1.5 uppercase tracking-widest font-heading">
-                          <Cpu className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFF04A] shrink-0" />
-                          <span>Technical Architecture:</span>
-                        </div>
-                        <p className="text-[9.5px] sm:text-xs text-gray-200 leading-snug font-medium line-clamp-1 sm:line-clamp-2">
-                          {project.technicalHighlight}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Card Footer: Tech Stack & Actions */}
-                    <div className="space-y-1 sm:space-y-2.5 pt-1 sm:pt-2.5 border-t border-[#292929] shrink-0">
-                      {/* Tech Tags - Mobile 3 tags, Desktop 5 tags */}
-                      <div className="flex sm:hidden flex-wrap gap-1">
-                        {project.stack.slice(0, 3).map((tech, techIdx) => (
-                          <span key={techIdx} className="px-1.5 py-0.5 rounded bg-[#181818] border border-[#FFF04A] text-[#FFF04A] text-[8.5px] font-mono font-black uppercase">
-                            {tech}
-                          </span>
-                        ))}
-                        {project.stack.length > 3 && (
-                          <span className="px-1 py-0.5 rounded bg-[#181818] border border-[#292929] text-gray-400 text-[8.5px] font-mono font-bold">
-                            +{project.stack.length - 3}
-                          </span>
-                        )}
-                      </div>
-                      <div className="hidden sm:flex flex-wrap gap-1.5">
-                        {project.stack.slice(0, 5).map((tech, techIdx) => (
-                          <span key={techIdx} className="px-2 py-0.5 rounded bg-[#181818] border border-[#FFF04A] text-[#FFF04A] text-xs font-mono font-black uppercase">
-                            {tech}
-                          </span>
-                        ))}
-                        {project.stack.length > 5 && (
-                          <span className="px-1.5 py-0.5 rounded bg-[#181818] border border-[#292929] text-gray-400 text-[10px] font-mono font-bold">
-                            +{project.stack.length - 5}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Action Links */}
-                      <div className="flex items-center justify-between pt-0.5 pb-0.5">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedProject(project);
-                          }}
-                          className="text-[9.5px] sm:text-xs font-black text-[#FFF04A] flex items-center gap-1 uppercase tracking-wider font-heading hover:underline group/btn shrink-0"
-                        >
-                          <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFF04A] group-hover/btn:scale-110 transition-transform" />
-                          <span>View Case Study</span>
-                          <ArrowUpRight className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
-                        </button>
-
-                        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                          {project.liveUrl && (
-                            <a
-                              href={project.liveUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-md bg-[#FFF04A] text-[#050505] text-[9.5px] sm:text-xs font-black uppercase flex items-center gap-1 hover:bg-[#FFFF66] transition-colors shadow-sm"
-                              title="Live Demo"
-                            >
-                              <span>Demo</span>
-                              <ExternalLink className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                            </a>
-                          )}
-                          {project.githubUrl && (
-                            <a
-                              href={project.githubUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-md bg-[#181818] text-white border border-[#292929] hover:border-[#FFF04A] hover:text-[#FFF04A] text-[9.5px] sm:text-xs font-bold uppercase flex items-center gap-1 transition-colors"
-                              title="GitHub Source"
-                            >
-                              <Github className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                              <span>Code</span>
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </motion.div>
+          {/* Center Indicator Pill with 10s Timer Animation */}
+          <div className="bg-[#121218]/80 backdrop-blur-md border border-white/15 rounded-full px-3.5 py-1.5 sm:px-5 sm:py-2.5 flex items-center gap-2 sm:gap-2.5 shadow-md">
+            {sortedProjects.map((_, dotIdx) => {
+              const isActive = activeIndex === dotIdx;
+              return (
+                <button
+                  key={dotIdx}
+                  type="button"
+                  onClick={() => setActiveIndex(dotIdx)}
+                  className="cursor-pointer transition-all duration-300 relative focus:outline-none"
+                  aria-label={`Slide ${dotIdx + 1}`}
+                >
+                  {isActive ? (
+                    <motion.div
+                      layoutId="carouselActivePill"
+                      className="w-6 h-2 sm:w-8 sm:h-2.5 rounded-full bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] relative overflow-hidden shadow-xs"
+                      transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                    >
+                      {/* Animated 10-second filling indicator */}
+                      <motion.div
+                        key={activeIndex + '-' + (isPaused ? 'p' : 'r')}
+                        initial={{ width: '0%' }}
+                        animate={{ width: isPaused ? '0%' : '100%' }}
+                        transition={{ duration: 10, ease: 'linear' }}
+                        className="h-full bg-black/25 rounded-full"
+                      />
+                    </motion.div>
+                  ) : (
+                    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#353544] hover:bg-white/60 transition-colors" />
+                  )}
+                </button>
               );
             })}
           </div>
 
-          {/* Navigation Controls */}
-          <div className="flex items-center justify-center gap-5 mt-4 relative z-40">
-            <button
-              onClick={handlePrev}
-              className="p-3 rounded-full bg-[#050505] text-[#FFF04A] border-2 border-[#050505] hover:bg-[#FFF04A] hover:text-[#050505] transition-all shadow-xl hover:scale-110 focus:outline-none"
-              aria-label="Previous project"
-            >
-              <ChevronLeft className="w-5 h-5 stroke-[3]" />
-            </button>
-
-            {/* Pagination Indicators */}
-            <div className="flex items-center gap-2 bg-[#050505]/90 px-4 py-1.5 rounded-full border border-[#050505]">
-              {projectsData.map((_, dotIdx) => (
-                <button
-                  key={dotIdx}
-                  onClick={() => setActiveIndex(dotIdx)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    activeIndex === dotIdx
-                      ? 'w-7 bg-[#FFF04A]'
-                      : 'w-2 bg-gray-600 hover:bg-gray-400'
-                  }`}
-                  aria-label={`Go to project ${dotIdx + 1}`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={handleNext}
-              className="p-3 rounded-full bg-[#050505] text-[#FFF04A] border-2 border-[#050505] hover:bg-[#FFF04A] hover:text-[#050505] transition-all shadow-xl hover:scale-110 focus:outline-none"
-              aria-label="Next project"
-            >
-              <ChevronRight className="w-5 h-5 stroke-[3]" />
-            </button>
-          </div>
-
+          {/* Right Arrow Button */}
+          <button
+            type="button"
+            onClick={handleNext}
+            className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#12121A]/85 backdrop-blur-md border-2 border-white/15 hover:border-[#FFD84D] flex items-center justify-center text-[#FFD84D] hover:bg-[#1A1A22] transition-all hover:scale-105 active:scale-95 shadow-lg cursor-pointer"
+            aria-label="Next project"
+          >
+            <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-[#FFD84D]" strokeWidth={2.5} />
+          </button>
         </div>
 
-        {/* Modal Dialog */}
+      </div>
+
+      {/* Case Study Modal Popup */}
+      <AnimatePresence>
         {selectedProject && (
           <ProjectModal
             project={selectedProject}
             onClose={() => setSelectedProject(null)}
           />
         )}
-
-      </div>
+      </AnimatePresence>
     </section>
   );
 }
