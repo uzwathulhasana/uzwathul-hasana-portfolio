@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion
 import { ArrowRight, Linkedin, Github, Mail, Download } from 'lucide-react';
 import { personalInfo, myGoal } from '../data/portfolioData';
 import profileImg from '../assets/profile.png';
+import { scrollToSection } from '../utils/scrollHelper';
 
 export default function Hero() {
   const heroRef = useRef(null);
@@ -20,12 +21,7 @@ export default function Hero() {
   const sparklesParallax = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : -60]);
 
   const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const yOffset = -70;
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
+    scrollToSection(id);
   };
 
   return (

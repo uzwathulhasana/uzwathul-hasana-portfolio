@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Linkedin, Github, Mail, Heart } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { scrollToSection } from '../utils/scrollHelper';
 
 const navLinks = [
   { id: 'hero', label: 'Home' },
@@ -17,12 +18,7 @@ export default function Footer() {
   const shouldReduceMotion = useReducedMotion();
 
   const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const yOffset = -70;
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
+    scrollToSection(id);
   };
 
   const socialLinks = [

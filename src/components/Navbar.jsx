@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import { Menu, X, Download } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { scrollToSection } from '../utils/scrollHelper';
 
 const navItems = [
   { id: 'hero', label: 'Home' },
@@ -52,14 +53,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (id) => {
+  const handleNavClick = (id) => {
     setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      const yOffset = -70;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
+    setTimeout(() => {
+      scrollToSection(id);
+    }, 20);
   };
 
 
@@ -86,7 +84,8 @@ export default function Navbar() {
           
           {/* UH Logo Badge & Title */}
           <button
-            onClick={() => scrollToSection('hero')}
+            type="button"
+            onClick={() => handleNavClick('hero')}
             className="flex items-center gap-2 sm:gap-2.5 group text-left focus:outline-none shrink-0 cursor-pointer"
             aria-label="Scroll to top"
           >
@@ -109,8 +108,9 @@ export default function Navbar() {
               const isActive = activeSection === item.id;
               return (
                 <button
+                  type="button"
                   key={item.id}
-                  onClick={() => scrollToSection(item.id)}
+                  onClick={() => handleNavClick(item.id)}
                   className={`text-xs transition-all duration-200 relative px-3 py-1.5 rounded-full cursor-pointer ${
                     isActive
                       ? 'bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] text-[#111111] font-black shadow-xs'
@@ -168,8 +168,9 @@ export default function Navbar() {
                   const isActive = activeSection === item.id;
                   return (
                     <button
+                      type="button"
                       key={item.id}
-                      onClick={() => scrollToSection(item.id)}
+                      onClick={() => handleNavClick(item.id)}
                       className={`text-left px-3.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-between cursor-pointer ${
                         isActive
                           ? 'bg-[#FFD84D] text-[#111111] shadow-2xs'
