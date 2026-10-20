@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 export default function BackgroundBlobs() {
   return (
     <>
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+      <div className="hidden md:block fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
       {/* Top Left Floating Warm Blob (matching mockup left annotation) */}
       <motion.div
         animate={{
@@ -127,8 +127,8 @@ export default function BackgroundBlobs() {
       />
       </div>
 
-      {/* Viewport Floating Geometric Accents & Sparkles (z-20 pointer-events-none) */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-20 select-none" aria-hidden="true">
+      {/* Viewport Floating Geometric Accents & Sparkles (z-20 pointer-events-none, hidden on mobile for smooth performance) */}
+      <div className="hidden md:block fixed inset-0 pointer-events-none overflow-hidden z-20 select-none" aria-hidden="true">
         <motion.div
           animate={{
             y: [0, -16, 0],

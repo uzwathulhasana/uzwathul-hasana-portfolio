@@ -37,6 +37,23 @@
     overflow-x: hidden;
   }
 
+  /* Mobile Hardware Acceleration & High-Performance Scrolling */
+  @media (max-width: 768px) {
+    body {
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Bypass heavy GPU backdrop blur calculation on in-page cards on mobile for buttery smooth 60fps scrolling */
+    main .backdrop-blur-md,
+    main .backdrop-blur-lg,
+    main .backdrop-blur-xl,
+    main .backdrop-blur-2xl,
+    footer .backdrop-blur-md {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
+  }
+
   h1 {
     font-size: clamp(2.5rem, 6.5vw, 4.5rem);
     font-weight: 800;

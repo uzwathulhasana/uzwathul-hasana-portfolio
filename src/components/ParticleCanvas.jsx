@@ -1,19 +1,33 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function ParticleCanvas() {
   const canvasRef = useRef(null);
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
+    // Disable on mobile/touch screens or reduced motion to eliminate frame drops and conserve battery
+    const isMobile = window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isMobile || prefersReducedMotion) {
+      setShouldRender(false);
+      return;
+    }
+
+    setShouldRender(true);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldRender) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
-
     let animId;
+    let isVisible = true;
     const parent = canvas.parentElement;
     let width = (canvas.width = (parent ? parent.offsetWidth : window.innerWidth) || 800);
     let height = (canvas.height = (parent ? parent.offsetHeight : window.innerHeight) || 600);
@@ -24,23 +38,40 @@ export default function ParticleCanvas() {
       height = canvas.height = canvas.parentElement.offsetHeight || 600;
     };
 
+    // Pause RAF animation when section is scrolled out of viewport
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animId) {
+          render();
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+
     window.addEventListener('resize', handleResize);
 
-    // Create 32 soft yellow particles
-    const particleCount = 32;
+    // Create 24 soft yellow particles
+    const particleCount = 24;
     const particles = Array.from({ length: particleCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
       radius: Math.max(1, Math.random() * 2 + 1),
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      alpha: Math.random() * 0.5 + 0.2,
-      baseAlpha: Math.random() * 0.4 + 0.15,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      alpha: Math.random() * 0.45 + 0.15,
+      baseAlpha: Math.random() * 0.35 + 0.1,
       pulseSpeed: Math.random() * 0.02 + 0.01,
       angle: Math.random() * Math.PI * 2,
     }));
 
     const render = () => {
+      if (!isVisible) {
+        animId = null;
+        return;
+      }
+
       try {
         ctx.clearRect(0, 0, width, height);
 
@@ -70,7 +101,7 @@ export default function ParticleCanvas() {
 
         animId = requestAnimationFrame(render);
       } catch (err) {
-        // Fallback gracefully without breaking React
+        // Fallback gracefully
       }
     };
 
@@ -78,14 +109,17 @@ export default function ParticleCanvas() {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      observer.disconnect();
       if (animId) cancelAnimationFrame(animId);
     };
-  }, []);
+  }, [shouldRender]);
+
+  if (!shouldRender) return null;
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none z-0 opacity-70"
+      className="hidden md:block absolute inset-0 pointer-events-none z-0 opacity-70"
       aria-hidden="true"
     />
   );

@@ -85,8 +85,8 @@ export default function Contact() {
       {/* Soft Particles Canvas */}
       <ParticleCanvas />
 
-      {/* Subtle Ambient Golden Glow in Background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none" aria-hidden="true">
+      {/* Subtle Ambient Golden Glow in Background (hidden on mobile for performance) */}
+      <div className="hidden sm:block absolute inset-0 pointer-events-none overflow-hidden select-none" aria-hidden="true">
         <div className="absolute top-1/3 -right-24 w-96 h-96 bg-gradient-to-br from-[#FFD84D]/15 via-[#FFF1A8]/5 to-transparent rounded-full blur-3xl opacity-50" />
         <div className="absolute -bottom-10 left-10 w-80 h-80 bg-[#E0A015]/10 rounded-full blur-3xl opacity-40" />
       </div>

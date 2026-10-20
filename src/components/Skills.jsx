@@ -210,7 +210,7 @@ export default function Skills() {
           repeat: Infinity,
           ease: 'easeInOut',
         }}
-        className="absolute top-1/4 -right-16 w-80 h-80 rounded-full bg-gradient-to-br from-[#FFD84D]/20 via-[#FFF1A8]/10 to-transparent blur-3xl pointer-events-none"
+        className="hidden sm:block absolute top-1/4 -right-16 w-80 h-80 rounded-full bg-gradient-to-br from-[#FFD84D]/20 via-[#FFF1A8]/10 to-transparent blur-3xl pointer-events-none"
       />
       <motion.div
         animate={{
@@ -224,7 +224,7 @@ export default function Skills() {
           ease: 'easeInOut',
           delay: 1.5,
         }}
-        className="absolute bottom-1/4 -left-16 w-80 h-80 rounded-full bg-gradient-to-tr from-[#FFF1A8]/30 via-[#FFD84D]/15 to-transparent blur-3xl pointer-events-none"
+        className="hidden sm:block absolute bottom-1/4 -left-16 w-80 h-80 rounded-full bg-gradient-to-tr from-[#FFF1A8]/30 via-[#FFD84D]/15 to-transparent blur-3xl pointer-events-none"
       />
 
       <div className="max-w-7xl mx-auto relative z-10">

@@ -54,8 +54,8 @@ export default function Projects() {
       {/* Particle Canvas Glow in Background */}
       <ParticleCanvas />
 
-      {/* Dynamic Ambient Golden Glow in Background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none" aria-hidden="true">
+      {/* Dynamic Ambient Golden Glow in Background (hidden on mobile for performance) */}
+      <div className="hidden sm:block absolute inset-0 pointer-events-none overflow-hidden select-none" aria-hidden="true">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[360px] bg-gradient-to-r from-[#FFD84D]/15 via-[#FFF1A8]/8 to-transparent rounded-full blur-3xl opacity-60" />
         <div className="absolute bottom-10 right-10 w-[360px] h-[360px] bg-[#E0A015]/10 rounded-full blur-3xl opacity-40" />
       </div>

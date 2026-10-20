@@ -42,7 +42,7 @@ export default function Hero() {
         />
 
         {/* Ambient Drifting Warm Blob 1 (Top Left) - Parallax Scroll Layer */}
-        <motion.div style={{ y: blob1Y }} className="absolute -top-24 -left-24">
+        <motion.div style={{ y: blob1Y }} className="hidden sm:block absolute -top-24 -left-24">
           <motion.div
             animate={shouldReduceMotion ? {} : {
               x: [0, 45, -25, 0],
@@ -59,7 +59,7 @@ export default function Hero() {
         </motion.div>
 
         {/* Ambient Drifting Warm Blob 2 (Top Right behind profile) - Faster Parallax */}
-        <motion.div style={{ y: blob2Y }} className="absolute top-10 -right-20">
+        <motion.div style={{ y: blob2Y }} className="hidden sm:block absolute top-10 -right-20">
           <motion.div
             animate={shouldReduceMotion ? {} : {
               x: [0, -40, 30, 0],
@@ -77,7 +77,7 @@ export default function Hero() {
         </motion.div>
 
         {/* Ambient Drifting Glow 3 (Bottom Center / Left) - Parallax Scroll Layer */}
-        <motion.div style={{ y: blob3Y }} className="absolute -bottom-20 left-1/4">
+        <motion.div style={{ y: blob3Y }} className="hidden sm:block absolute -bottom-20 left-1/4">
           <motion.div
             animate={shouldReduceMotion ? {} : {
               x: [0, 30, -30, 0],
@@ -95,7 +95,7 @@ export default function Hero() {
         </motion.div>
 
         {/* Animated Floating Golden Sparkles ✦ with Subtle Parallax */}
-        <motion.div style={{ y: sparklesParallax }} className="absolute inset-0 pointer-events-none">
+        <motion.div style={{ y: sparklesParallax }} className="hidden sm:block absolute inset-0 pointer-events-none">
           <motion.div
             animate={shouldReduceMotion ? {} : {
               y: [0, -18, 0],
