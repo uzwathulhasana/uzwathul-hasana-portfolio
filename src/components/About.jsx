@@ -48,7 +48,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="text-[#6B6451] text-sm sm:text-lg leading-relaxed font-medium"
+              className="text-[#6B6451] text-sm sm:text-lg leading-relaxed font-medium text-justify sm:text-left"
             >
               {personalInfo.aboutBio}
             </motion.p>

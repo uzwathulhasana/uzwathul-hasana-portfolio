@@ -18,6 +18,8 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const navRef = React.useRef(null);
+  const mobileMenuRef = React.useRef(null);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -25,6 +27,30 @@ export default function Navbar() {
     damping: 30,
     restDelta: 0.001
   });
+
+  // Touch/click outside listener to automatically dismiss/go back from mobile menu
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const handleTouchOrClickOutside = (e) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(e.target) &&
+        navRef.current &&
+        !navRef.current.contains(e.target)
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('touchstart', handleTouchOrClickOutside, { passive: true });
+    document.addEventListener('mousedown', handleTouchOrClickOutside);
+
+    return () => {
+      document.removeEventListener('touchstart', handleTouchOrClickOutside);
+      document.removeEventListener('mousedown', handleTouchOrClickOutside);
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,7 +95,25 @@ export default function Navbar() {
         style={{ scaleX }}
       />
 
+      {/* Screen Backdrop for Mobile Menu: touching the screen automatically goes back/closes menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            key="mobile-menu-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setMobileMenuOpen(false)}
+            onTouchStart={() => setMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/45 backdrop-blur-[2px] lg:hidden -z-10"
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
+
       <nav
+        ref={navRef}
         className={`px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 transition-all duration-300 ${
           isScrolled
             ? 'bg-white/70 border-b border-white/70 shadow-[0_8px_30px_rgba(17,17,17,0.04)]'
@@ -82,18 +126,19 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 sm:gap-4">
           
-          {/* UH Logo Badge & Title */}
+          {/* UH Logo Badge & Title: name color stays #111111 on mobile touch; hover color change only on desktop lg */}
           <button
             type="button"
             onClick={() => handleNavClick('hero')}
-            className="flex items-center gap-2 sm:gap-2.5 group text-left focus:outline-none shrink-0 cursor-pointer"
+            className="flex items-center gap-2 sm:gap-2.5 group text-left focus:outline-none shrink-0 cursor-pointer select-none active:bg-transparent"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
             aria-label="Scroll to top"
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] text-[#111111] font-extrabold flex items-center justify-center text-[11px] sm:text-xs tracking-tight shadow-sm group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] text-[#111111] font-extrabold flex items-center justify-center text-[11px] sm:text-xs tracking-tight shadow-sm lg:group-hover:scale-105 transition-transform">
               UH
             </div>
             <div className="leading-tight">
-              <span className="font-extrabold text-xs sm:text-base text-[#111111] block tracking-tight group-hover:text-[#F4BD32] transition-colors">
+              <span className="font-extrabold text-xs sm:text-base text-[#111111] block tracking-tight lg:group-hover:text-[#F4BD32] transition-colors">
                 {personalInfo.name}
               </span>
               <span className="text-[10px] sm:text-[11px] text-[#6B6451] font-medium block">
@@ -153,6 +198,7 @@ export default function Navbar() {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
+              ref={mobileMenuRef}
               initial={{ opacity: 0, height: 0, y: -6 }}
               animate={{ opacity: 1, height: 'auto', y: 0 }}
               exit={{ opacity: 0, height: 0, y: -6 }}

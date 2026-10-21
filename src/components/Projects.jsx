@@ -99,7 +99,7 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full h-[510px] sm:h-[550px] md:h-[530px] flex items-center justify-center my-4 sm:my-6"
+          className="relative w-full h-[430px] sm:h-[550px] md:h-[530px] flex items-center justify-center my-3 sm:my-6"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -131,80 +131,80 @@ export default function Projects() {
                 onClick={() => {
                   if (!isCenter) setActiveIndex(index);
                 }}
-                className={`absolute w-[92vw] max-w-[340px] sm:max-w-[480px] md:max-w-[530px] rounded-xl sm:rounded-3xl p-4 sm:p-6 text-left backdrop-blur-xl transition-all duration-300 select-none ${
+                className={`absolute w-[86vw] max-w-[305px] sm:w-[92vw] sm:max-w-[480px] md:max-w-[530px] rounded-xl sm:rounded-3xl p-3 sm:p-6 text-left backdrop-blur-xl transition-all duration-300 select-none ${
                   isCenter
                     ? 'bg-[#12121A]/85 border-2 border-[#FFD84D]/50 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85),0_0_35px_rgba(255,216,77,0.18),inset_0_1px_1px_rgba(255,255,255,0.12)] cursor-default hover:border-[#FFD84D]/80 hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_42px_rgba(255,216,77,0.28),inset_0_1px_1px_rgba(255,255,255,0.16)]'
                     : 'bg-[#14141E]/65 border border-white/12 shadow-[0_15px_35px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.06)] cursor-pointer hover:opacity-85 hover:border-[#FFD84D]/50 hover:shadow-[0_15px_35px_rgba(255,216,77,0.12)]'
                 }`}
               >
                 {/* Header: Role Pill & Number Badge */}
-                <div className="flex items-center justify-between gap-2.5 sm:gap-3 pb-2.5 sm:pb-3.5 border-b border-white/10">
-                  <span className="px-2.5 py-0.5 sm:px-3.5 sm:py-1 rounded-full text-[9px] sm:text-[11px] font-mono font-bold tracking-wider uppercase border border-[#FFD84D]/50 bg-gradient-to-r from-[#FFD84D]/15 to-[#F59E0B]/10 text-transparent bg-clip-text bg-gradient-to-r from-[#FFF2A3] via-[#FFD84D] to-[#F59E0B] truncate max-w-[190px] sm:max-w-none">
+                <div className="flex items-center justify-between gap-2 sm:gap-3 pb-2 sm:pb-3.5 border-b border-white/10">
+                  <span className="px-2 py-0.5 sm:px-3.5 sm:py-1 rounded-full text-[8.5px] sm:text-[11px] font-mono font-bold tracking-wider uppercase border border-[#FFD84D]/50 bg-gradient-to-r from-[#FFD84D]/15 to-[#F59E0B]/10 text-transparent bg-clip-text bg-gradient-to-r from-[#FFF2A3] via-[#FFD84D] to-[#F59E0B] truncate max-w-[170px] sm:max-w-none">
                     {project.role}
                   </span>
-                  <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-md sm:rounded-lg bg-gradient-to-br from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] text-[#111111] font-mono font-black text-xs sm:text-sm flex items-center justify-center shrink-0 shadow-xs">
+                  <span className="w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg bg-gradient-to-br from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] text-[#111111] font-mono font-black text-[11px] sm:text-sm flex items-center justify-center shrink-0 shadow-xs">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                 </div>
 
                 {/* Title & Description with Yellow Gradient */}
-                <div className="mt-2.5 sm:mt-4">
-                  <h3 className="text-base sm:text-xl md:text-2xl font-black uppercase tracking-tight leading-snug line-clamp-2 bg-gradient-to-r from-[#FFF5C0] via-[#FFD84D] to-[#F5A623] bg-clip-text text-transparent">
+                <div className="mt-2 sm:mt-4">
+                  <h3 className="text-sm sm:text-xl md:text-2xl font-black uppercase tracking-tight leading-snug line-clamp-2 bg-gradient-to-r from-[#FFF5C0] via-[#FFD84D] to-[#F5A623] bg-clip-text text-transparent">
                     {project.title}
                   </h3>
-                  <p className="text-[11px] sm:text-[13px] text-white/80 font-medium leading-relaxed mt-1.5 sm:mt-2 line-clamp-2">
+                  <p className="text-[10px] sm:text-[13px] text-white/80 font-medium leading-relaxed mt-1 sm:mt-2 line-clamp-2">
                     {project.shortDescription || project.description}
                   </p>
                 </div>
 
                 {/* Structured Callout 1: Problem Solved */}
-                <div className="mt-2.5 sm:mt-3.5 p-2.5 sm:p-3.5 rounded-lg sm:rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/10 text-left">
-                  <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] bg-clip-text text-transparent">
-                    <AlertCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFD84D] shrink-0" />
+                <div className="mt-2 sm:mt-3.5 p-2 sm:p-3.5 rounded-lg sm:rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/10 text-left">
+                  <div className="flex items-center gap-1.5 text-[9.5px] sm:text-[11px] font-extrabold uppercase tracking-wider bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] bg-clip-text text-transparent">
+                    <AlertCircle className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-[#FFD84D] shrink-0" />
                     <span>Problem Solved:</span>
                   </div>
-                  <p className="text-[11px] sm:text-xs text-white/75 font-normal leading-relaxed mt-1 line-clamp-2">
+                  <p className="text-[10px] sm:text-xs text-white/75 font-normal leading-relaxed mt-0.5 sm:mt-1 line-clamp-2">
                     {project.caseStudy?.problem || project.description}
                   </p>
                 </div>
 
                 {/* Structured Callout 2: Technical Architecture */}
-                <div className="mt-2 sm:mt-2.5 p-2.5 sm:p-3.5 rounded-lg sm:rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/10 text-left">
-                  <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] bg-clip-text text-transparent">
-                    <Cpu className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFD84D] shrink-0" />
+                <div className="mt-1.5 sm:mt-2.5 p-2 sm:p-3.5 rounded-lg sm:rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/10 text-left">
+                  <div className="flex items-center gap-1.5 text-[9.5px] sm:text-[11px] font-extrabold uppercase tracking-wider bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] bg-clip-text text-transparent">
+                    <Cpu className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-[#FFD84D] shrink-0" />
                     <span>Technical Architecture:</span>
                   </div>
-                  <p className="text-[11px] sm:text-xs text-white/75 font-normal leading-relaxed mt-1 line-clamp-2">
+                  <p className="text-[10px] sm:text-xs text-white/75 font-normal leading-relaxed mt-0.5 sm:mt-1 line-clamp-2">
                     {project.caseStudy?.solution || project.description}
                   </p>
                 </div>
 
                 {/* Technology Pills */}
-                <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-2.5 sm:mt-4">
+                <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-2 sm:mt-4">
                   {project.tags.slice(0, 5).map((tag, tIdx) => (
                     <span
                       key={tIdx}
-                      className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg text-[9px] sm:text-xs font-mono font-bold tracking-wider uppercase border border-[#FFD84D]/40 text-[#FFD84D] bg-gradient-to-r from-[#FFD84D]/10 to-[#F59E0B]/5"
+                      className="px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg text-[8.5px] sm:text-xs font-mono font-bold tracking-wider uppercase border border-[#FFD84D]/40 text-[#FFD84D] bg-gradient-to-r from-[#FFD84D]/10 to-[#F59E0B]/5"
                     >
                       {tag}
                     </span>
                   ))}
                   {project.tags.length > 5 && (
-                    <span className="px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-[9px] sm:text-xs font-mono font-bold text-white/60 border border-white/10 bg-white/5">
+                    <span className="px-1 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-[8.5px] sm:text-xs font-mono font-bold text-white/60 border border-white/10 bg-white/5">
                       +{project.tags.length - 5}
                     </span>
                   )}
                 </div>
 
                 {/* Action Bar: Case Study & Code Buttons */}
-                <div className="flex items-center justify-between pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-white/10">
+                <div className="flex items-center justify-between pt-2.5 sm:pt-4 mt-2.5 sm:mt-4 border-t border-white/10">
                   <button
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedProject(project);
                     }}
-                    className="inline-flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-black uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] hover:opacity-80 transition-opacity group/btn cursor-pointer"
+                    className="inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-black uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#FFE86B] via-[#FFD84D] to-[#F59E0B] hover:opacity-80 transition-opacity group/btn cursor-pointer"
                   >
                     <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFD84D] group-hover/btn:scale-110 transition-transform" />
                     <span>View Case Study</span>
@@ -216,7 +216,7 @@ export default function Projects() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-md sm:rounded-lg bg-white/10 hover:bg-white/15 text-white text-[11px] sm:text-xs font-bold border border-white/15 hover:border-[#FFD84D]/50 transition-all shadow-2xs backdrop-blur-sm"
+                    className="inline-flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-md sm:rounded-lg bg-white/10 hover:bg-white/15 text-white text-[10px] sm:text-xs font-bold border border-white/15 hover:border-[#FFD84D]/50 transition-all shadow-2xs backdrop-blur-sm"
                   >
                     <Github className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" />
                     <span>Code</span>
