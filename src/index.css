@@ -18,11 +18,17 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     scroll-padding-top: 80px;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     background-color: var(--bg);
     color: var(--ink);
+  }
+
+  /* Desktop smooth scrolling for anchor links while preserving 100% native momentum scrolling on mobile touch */
+  @media (hover: hover) and (pointer: fine) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   section[id] {
@@ -35,20 +41,35 @@
     font-size: 16px;
     line-height: 1.6;
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
   }
 
-  /* Mobile Hardware Acceleration & High-Performance Scrolling */
+  /* Mobile Hardware Acceleration & Buttery Smooth 60/120fps Scrolling */
   @media (max-width: 768px) {
-    body {
-      -webkit-overflow-scrolling: touch;
+    /* Bypass heavy GPU backdrop blur calculation on all in-page cards on mobile */
+    .glass-card,
+    .glass-panel {
+      background-color: rgba(255, 255, 255, 0.94) !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
     }
 
-    /* Bypass heavy GPU backdrop blur calculation on in-page cards on mobile for buttery smooth 60fps scrolling */
-    main .backdrop-blur-md,
-    main .backdrop-blur-lg,
-    main .backdrop-blur-xl,
-    main .backdrop-blur-2xl,
-    footer .backdrop-blur-md {
+    .dark-card {
+      background-color: rgba(18, 18, 24, 0.96) !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
+
+    .glass-input {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
+
+    main [class*="backdrop-blur"],
+    footer [class*="backdrop-blur"],
+    header nav {
       -webkit-backdrop-filter: none !important;
       backdrop-filter: none !important;
     }
@@ -284,6 +305,30 @@
 .blob-shape {
   border-radius: 64% 36% 54% 46% / 48% 58% 42% 52%;
   transition: border-radius 8s ease-in-out infinite alternate;
+}
+
+@keyframes morphBlob {
+  0%, 100% {
+    border-radius: 65% 35% 58% 42% / 46% 64% 36% 54%;
+  }
+  33% {
+    border-radius: 52% 48% 44% 56% / 58% 42% 58% 42%;
+  }
+  66% {
+    border-radius: 44% 56% 64% 36% / 50% 50% 50% 50%;
+  }
+}
+
+.animate-morph-blob {
+  border-radius: 65% 35% 58% 42% / 46% 64% 36% 54%;
+  animation: morphBlob 10s ease-in-out infinite;
+  will-change: auto;
+}
+
+@media (max-width: 640px) {
+  .animate-morph-blob {
+    animation: none !important;
+  }
 }
 
 /* Cursor Glow Overlay */

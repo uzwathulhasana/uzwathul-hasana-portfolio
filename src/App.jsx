@@ -13,7 +13,7 @@ import BackgroundBlobs from './components/BackgroundBlobs';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#FFFBEA] text-[#111111] flex flex-col font-sans selection:bg-[#FFD84D] selection:text-[#111111] relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#FFFBEA] text-[#111111] flex flex-col font-sans selection:bg-[#FFD84D] selection:text-[#111111] relative">
       {/* Background Drifting Ambient Blobs */}
       <BackgroundBlobs />
 

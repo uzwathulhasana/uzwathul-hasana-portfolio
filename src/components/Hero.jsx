@@ -8,6 +8,8 @@ import { scrollToSection } from '../utils/scrollHelper';
 export default function Hero() {
   const heroRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const disableContinuousAnim = shouldReduceMotion || isMobile;
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -193,7 +195,7 @@ export default function Hero() {
             rotate: { duration: 30, repeat: Infinity, ease: "linear" },
             scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
           }}
-          className="absolute -top-10 right-10 sm:right-24 w-28 h-28 rounded-full border-2 border-dashed border-[#FFD84D]/35"
+          className="hidden sm:block absolute -top-10 right-10 sm:right-24 w-28 h-28 rounded-full border-2 border-dashed border-[#FFD84D]/35"
         />
 
         <motion.div
@@ -205,7 +207,7 @@ export default function Hero() {
             rotate: { duration: 24, repeat: Infinity, ease: "linear" },
             y: { duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 },
           }}
-          className="absolute bottom-16 left-6 sm:left-14 w-20 h-20 rounded-full border border-dashed border-[#E0A015]/30"
+          className="hidden sm:block absolute bottom-16 left-6 sm:left-14 w-20 h-20 rounded-full border border-dashed border-[#E0A015]/30"
         />
 
         {/* Floating Mini Glowing Circles */}
@@ -220,7 +222,7 @@ export default function Hero() {
             ease: "easeInOut",
             delay: 1.2,
           }}
-          className="absolute top-1/3 left-4 w-3.5 h-3.5 rounded-full bg-[#FFD84D] shadow-sm opacity-60"
+          className="hidden sm:block absolute top-1/3 left-4 w-3.5 h-3.5 rounded-full bg-[#FFD84D] shadow-sm opacity-60"
         />
 
         <motion.div
@@ -234,7 +236,7 @@ export default function Hero() {
             ease: "easeInOut",
             delay: 2.2,
           }}
-          className="absolute bottom-32 right-8 w-4 h-4 rounded-full bg-gradient-to-tr from-[#FFD84D] to-[#FFF1A8] shadow-sm opacity-50"
+          className="hidden sm:block absolute bottom-32 right-8 w-4 h-4 rounded-full bg-gradient-to-tr from-[#FFD84D] to-[#FFF1A8] shadow-sm opacity-50"
         />
       </div>
 
@@ -361,22 +363,9 @@ export default function Hero() {
               {/* Soft Ambient Background Spread */}
               <div className="absolute -right-6 -bottom-6 sm:-right-10 sm:-bottom-10 w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-gradient-to-br from-[#FFF1A8]/60 via-[#FFD84D]/30 to-transparent blur-2xl pointer-events-none -z-10" />
 
-              {/* Animated Morphing Yellow Blob Background */}
-              <motion.div
-                animate={{
-                  borderRadius: [
-                    '65% 35% 58% 42% / 46% 64% 36% 54%',
-                    '52% 48% 44% 56% / 58% 42% 58% 42%',
-                    '44% 56% 64% 36% / 50% 50% 50% 50%',
-                    '65% 35% 58% 42% / 46% 64% 36% 54%',
-                  ],
-                }}
-                transition={{
-                  duration: 10,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute inset-0 bg-gradient-to-tr from-[#E0A015] via-[#FFD84D] to-[#FFF1A8] shadow-2xl"
+              {/* Animated Morphing Yellow Blob Background (CSS-accelerated) */}
+              <div
+                className="absolute inset-0 bg-gradient-to-tr from-[#E0A015] via-[#FFD84D] to-[#FFF1A8] shadow-2xl animate-morph-blob"
               />
 
               {/* Inner Photo Frame with smooth organic crop */}
@@ -392,7 +381,7 @@ export default function Hero() {
               
               {/* 1. React Badge (Top-Left) */}
               <motion.div
-                animate={{
+                animate={disableContinuousAnim ? {} : {
                   y: [0, -10, 0],
                   rotate: [-3, 3, -3],
                 }}
@@ -416,7 +405,7 @@ export default function Hero() {
 
               {/* 2. Figma Badge (Bottom-Left) */}
               <motion.div
-                animate={{
+                animate={disableContinuousAnim ? {} : {
                   y: [0, 9, 0],
                   rotate: [3, -3, 3],
                 }}
@@ -440,7 +429,7 @@ export default function Hero() {
 
               {/* 3. JavaScript Badge (Bottom-Right) */}
               <motion.div
-                animate={{
+                animate={disableContinuousAnim ? {} : {
                   y: [0, -8, 0],
                   rotate: [-4, 4, -4],
                 }}
@@ -460,7 +449,7 @@ export default function Hero() {
 
               {/* 4. Tailwind CSS Badge (Top-Right) */}
               <motion.div
-                animate={{
+                animate={disableContinuousAnim ? {} : {
                   y: [0, 8, 0],
                   rotate: [3, -3, 3],
                 }}

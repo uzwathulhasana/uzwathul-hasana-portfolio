@@ -53,30 +53,51 @@ export default function Navbar() {
   }, [mobileMenuOpen]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-
-      const sections = navItems.map((item) => item.id);
-      let currentSection = 'hero';
-
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          // Active when section crosses upper viewport
-          if (rect.top <= 220 && rect.bottom >= 150) {
-            currentSection = sectionId;
-            break;
+    // 1. High-performance IntersectionObserver for active section highlighting (zero forced layout reflow)
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
           }
-        }
+        });
+      },
+      {
+        rootMargin: '-20% 0px -60% 0px',
+        threshold: 0,
       }
+    );
 
-      setActiveSection(currentSection);
+    navItems.forEach((item) => {
+      const el = document.getElementById(item.id);
+      if (el) observer.observe(el);
+    });
+
+    // 2. Throttled scroll listener using requestAnimationFrame for navbar elevation
+    let ticking = false;
+    let lastScrolled = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled !== lastScrolled) {
+            lastScrolled = scrolled;
+            setIsScrolled(scrolled);
+          }
+          ticking = false;
+        });
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleNavClick = (id) => {
@@ -114,14 +135,13 @@ export default function Navbar() {
 
       <nav
         ref={navRef}
-        className={`px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 transition-all duration-300 ${
+        className={`px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 transition-all duration-300 sm:backdrop-blur-md ${
           isScrolled
-            ? 'bg-white/70 border-b border-white/70 shadow-[0_8px_30px_rgba(17,17,17,0.04)]'
-            : 'bg-white/35 border-b border-white/40'
+            ? 'bg-white/95 sm:bg-white/70 border-b border-white/70 shadow-[0_8px_30px_rgba(17,17,17,0.04)]'
+            : 'bg-[#FFFBEA]/95 sm:bg-white/35 border-b border-white/40'
         }`}
         style={{
-          WebkitBackdropFilter: 'blur(16px)',
-          backdropFilter: 'blur(16px)',
+          transform: 'translateZ(0)',
         }}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 sm:gap-4">

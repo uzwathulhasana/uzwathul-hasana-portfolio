@@ -322,8 +322,7 @@ export default function Skills() {
         </motion.div>
 
         {/* Skills Cards Grid - 5 Columns with Scroll Stagger, Hover Lift & Golden Glow */}
-        <motion.div
-          layout
+        <div
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3.5"
         >
           <AnimatePresence mode="popLayout">
@@ -331,14 +330,13 @@ export default function Skills() {
               return (
                 <motion.div
                   key={skill.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.1 }}
+                  viewport={{ once: true, margin: "50px" }}
                   exit={{ opacity: 0, scale: 0.9, y: -10 }}
                   transition={{
-                    duration: 0.45,
-                    delay: Math.min(index * 0.035, 0.45),
+                    duration: 0.35,
+                    delay: Math.min(index * 0.025, 0.3),
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   whileHover={{
@@ -394,7 +392,7 @@ export default function Skills() {
               );
             })}
           </AnimatePresence>
-        </motion.div>
+        </div>
 
       </div>
     </section>
